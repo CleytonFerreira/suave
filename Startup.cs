@@ -8,6 +8,7 @@ namespace suave
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            var secret = configuration["CONN_STRING"];
         }
 
         public IConfiguration Configuration { get; }

@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using suave.Context;
+using suave.Repositories;
+using suave.Repositories.Interfaces;
 
 namespace suave
 {
@@ -18,6 +20,9 @@ namespace suave
             services.AddDbContext<AppDbContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
+            
+            services.AddTransient<ILancheRepository, LancheRepository>();
+            services.AddTransient<ICategoriaRepository, CategoriaRepository>();
             services.AddControllersWithViews();
         }
 

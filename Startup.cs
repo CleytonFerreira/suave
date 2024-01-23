@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using suave.Context;
+using suave.Models;
 using suave.Repositories;
 using suave.Repositories.Interfaces;
 
@@ -17,13 +18,14 @@ namespace suave
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options => 
+            services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
-            
+
             services.AddTransient<ILancheRepository, LancheRepository>();
             services.AddTransient<ICategoriaRepository, CategoriaRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped(sp => CarrinhoCompra.GetCarrinho(sp));
             services.AddControllersWithViews();
             services.AddMemoryCache();
             services.AddSession();

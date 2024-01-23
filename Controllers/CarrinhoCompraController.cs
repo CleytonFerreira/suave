@@ -5,13 +5,13 @@ using suave.ViewModels;
 
 namespace suave.Controllers
 {
-    [Route("[controller]")]
     public class CarrinhoCompraController : Controller
     {
-        private readonly ILancheRepository _lancheRepository;
+       private readonly ILancheRepository _lancheRepository;
         private readonly CarrinhoCompra _carrinhoCompra;
 
-        public CarrinhoCompraController(ILancheRepository lancheRepository, CarrinhoCompra carrinhoCompra)
+        public CarrinhoCompraController(ILancheRepository lancheRepository, 
+            CarrinhoCompra carrinhoCompra)
         {
             _lancheRepository = lancheRepository;
             _carrinhoCompra = carrinhoCompra;
@@ -30,12 +30,12 @@ namespace suave.Controllers
 
             return View(carrinhoCompraVM);
         }
-
-        public IActionResult AdicionarItemNoCarrinhoCompra(int LancheId)
+        public IActionResult AdicionarItemNoCarrinhoCompra(int lancheId)
         {
-            var lancheSelecionado = _lancheRepository.Lanches.FirstOrDefault(p => p.LancheId == LancheId);
+            var lancheSelecionado = _lancheRepository.Lanches
+                                    .FirstOrDefault(p=> p.LancheId == lancheId); 
 
-            if (lancheSelecionado != null)
+            if(lancheSelecionado != null)
             {
                 _carrinhoCompra.AdicionarAoCarrinho(lancheSelecionado);
             }
@@ -43,15 +43,16 @@ namespace suave.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult RemoverItemDoCarrinhoCompra(int LancheId)
+        public IActionResult RemoverItemDoCarrinhoCompra(int lancheId)
         {
-            var lancheSelecionado = _lancheRepository.Lanches.FirstOrDefault(p => p.LancheId == LancheId);
+            var lancheSelecionado = _lancheRepository.Lanches
+                                    .FirstOrDefault(p => p.LancheId == lancheId);
 
             if (lancheSelecionado != null)
             {
                 _carrinhoCompra.RemoverDoCarrinho(lancheSelecionado);
             }
-
+            
             return RedirectToAction("Index");
         }
     }

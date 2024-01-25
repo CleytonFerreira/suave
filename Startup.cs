@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using suave.Context;
 using suave.Models;
@@ -21,6 +22,10 @@ namespace suave
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                    .AddEntityFrameworkStores<AppDbContext>()
+                    .AddDefaultTokenProviders();
 
             services.AddTransient<ILancheRepository, LancheRepository>();
             services.AddTransient<ICategoriaRepository, CategoriaRepository>();
@@ -50,13 +55,14 @@ namespace suave
             app.UseStaticFiles();
             app.UseRouting();
             app.UseSession();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "categoriaFiltro",
                     pattern: "Lanche/{action}/{categoria}",
-                    defaults: new {Controller = "Lanche", action = "List"});
+                    defaults: new { Controller = "Lanche", action = "List" });
 
                 endpoints.MapControllerRoute(
                     name: "default",

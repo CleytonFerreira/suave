@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using suave.Models;
 using suave.Repositories.Interfaces;
@@ -7,10 +8,10 @@ namespace suave.Controllers
 {
     public class CarrinhoCompraController : Controller
     {
-       private readonly ILancheRepository _lancheRepository;
+        private readonly ILancheRepository _lancheRepository;
         private readonly CarrinhoCompra _carrinhoCompra;
 
-        public CarrinhoCompraController(ILancheRepository lancheRepository, 
+        public CarrinhoCompraController(ILancheRepository lancheRepository,
             CarrinhoCompra carrinhoCompra)
         {
             _lancheRepository = lancheRepository;
@@ -30,12 +31,14 @@ namespace suave.Controllers
 
             return View(carrinhoCompraVM);
         }
+
+        [Authorize]
         public IActionResult AdicionarItemNoCarrinhoCompra(int lancheId)
         {
             var lancheSelecionado = _lancheRepository.Lanches
-                                    .FirstOrDefault(p=> p.LancheId == lancheId); 
+                                    .FirstOrDefault(p => p.LancheId == lancheId);
 
-            if(lancheSelecionado != null)
+            if (lancheSelecionado != null)
             {
                 _carrinhoCompra.AdicionarAoCarrinho(lancheSelecionado);
             }
@@ -43,6 +46,7 @@ namespace suave.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
         public IActionResult RemoverItemDoCarrinhoCompra(int lancheId)
         {
             var lancheSelecionado = _lancheRepository.Lanches
@@ -52,7 +56,7 @@ namespace suave.Controllers
             {
                 _carrinhoCompra.RemoverDoCarrinho(lancheSelecionado);
             }
-            
+
             return RedirectToAction("Index");
         }
     }

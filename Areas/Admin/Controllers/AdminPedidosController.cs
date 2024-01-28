@@ -3,6 +3,8 @@ using suave.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ReflectionIT.Mvc.Paging;
+using suave.ViewModels;
 
 namespace suave.Areas.Admin.Controllers
 {
@@ -17,10 +19,46 @@ namespace suave.Areas.Admin.Controllers
             _context = context;
         }
 
-        // GET: Admin/AdminPedidos
-        public async Task<IActionResult> Index()
+        public IActionResult PedidoLanches(int? id)
         {
-            return View(await _context.Pedidos.ToListAsync());
+            var pedido = _context.Pedidos
+                        .Include(pd => pd.PedidoItens)
+                        .ThenInclude(l => l.Lanche)
+                        .FirstOrDefault(p => p.PedidoId == id);
+
+            if (pedido == null)
+            {
+                Response.StatusCode = 404;
+                return View("PedidoNotFound", id.Value);
+            }
+
+            PedidoLancheViewModel pedidoLanches = new PedidoLancheViewModel()
+            {
+                Pedido = pedido,
+                PedidoDetalhes = pedido.PedidoItens
+            };
+
+            return View(pedidoLanches);
+        }
+
+        // GET: Admin/AdminPedidos
+        // public async Task<IActionResult> Index()
+        // {
+        //     return View(await _context.Pedidos.ToListAsync());
+        // }
+
+        public async Task<IActionResult> Index(string filter, int pageindex = 1, string sort = "Nome")
+        {
+            var resultado = _context.Pedidos.AsNoTracking().AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                resultado = resultado.Where(p => p.Nome.Contains(filter));
+            }
+
+            var model = await PagingList.CreateAsync(resultado, 5, pageindex, sort, "Nome");
+            model.RouteValue = new RouteValueDictionary { { "filter", filter } };
+            return View(model);
         }
 
         // GET: Admin/AdminPedidos/Details/5

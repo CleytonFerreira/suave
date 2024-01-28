@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ReflectionIT.Mvc.Paging;
+using suave.Areas.Admin.Servicos;
 using suave.Context;
 using suave.Models;
 using suave.Repositories;
@@ -32,6 +34,7 @@ namespace suave
             services.AddTransient<ICategoriaRepository, CategoriaRepository>();
             services.AddTransient<IPedidoRepository, PedidoRepository>();
             services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
+            services.AddScoped<RelatorioVendasService>();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Admin",
@@ -43,6 +46,11 @@ namespace suave
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(sp => CarrinhoCompra.GetCarrinho(sp));
             services.AddControllersWithViews();
+            services.AddPaging(options => 
+            {
+                options.ViewName = "Bootstrap5";
+                options.PageParameterName = "pageindex";
+            });
             services.AddMemoryCache();
             services.AddSession();
         }

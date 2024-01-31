@@ -23,6 +23,23 @@
                         asp-action="Index">Pedidos</a>
                     <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminRelatorioVendas"
                         asp-action="Index">Relatório Vendas</a>
+
+                    <!-- Graficos-->
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Gráficos de Vendas
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="AdminGrafico"
+                                asp-action="Index">Vendas Anual</a>
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="AdminGrafico"
+                                asp-action="VendasMensal" asp-route-dias="30">Vendas Mensais</a>
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="AdminGrafico"
+                                asp-action="VendasSemanal" asp-route-dias="7">Vendas Semanais</a>
+                        </div>
+                    </div>
+
                     <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminImagens"
                         asp-action="Index">Gerenciar Imagens</a>
                 </div>
@@ -41,7 +58,7 @@
             <p><a target="_blank" href="https://github.com/CleytonFerreira">&copy; 2024 - Cleyton Ferreira</a></p>
         </div>
     </footer>
-    
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

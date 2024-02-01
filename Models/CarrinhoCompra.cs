@@ -77,10 +77,19 @@ namespace suave.Models
 
         public List<CarrinhoCompraItem> GetCarrinhoCompraItens()
         {
-            return CarrinhoCompraItems ?? (
+            if (CarrinhoCompraItems != null)
+            {
+                return CarrinhoCompraItems;
+            }
+            else
+            {
                 CarrinhoCompraItems = _context.CarrinhoCompraItens
-                .Where(c => c.CarrinhoCompraId == CarrinhoCompraId).Include(s => s.Lanche)
-                .ToList());
+                                     .Where(c => c.CarrinhoCompraId == CarrinhoCompraId)
+                                     .Include(s => s.Lanche)
+                                     .ToList();
+
+                return CarrinhoCompraItems;
+            }
         }
 
         public void LimparCarrinho()

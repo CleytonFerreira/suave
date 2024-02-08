@@ -1,2 +1,4 @@
-# suave
-Projeto de lanchonete para vendas on-line
+# Suave
+Projeto MVC de lanchonete para registro de pedidos on-line.
+
+ 
